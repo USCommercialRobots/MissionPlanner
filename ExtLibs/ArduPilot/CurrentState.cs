@@ -1078,7 +1078,7 @@ namespace MissionPlanner
         public float sonarvoltage { get; set; }
 
         // current firmware
-        public Firmwares firmware = Firmwares.ArduCopter2;
+        public Firmwares firmware = Firmwares.ArduRover;
         public float freemem { get; set; }
         public float load { get; set; }
         public float brklevel { get; set; }
