@@ -14,9 +14,10 @@ namespace MissionPlanner
         {
             InitializeComponent();
 
-            string strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            string strVersion = "aee"; // System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-            TXT_version.Text = "Version: " + Application.ProductVersion; // +" Build " + strVersion;
+            //TXT_version.Text = "Version: " + Application.ProductVersion; // +" Build " + strVersion;
+            TXT_version.Text = "Version: 1.0";
 
             if (Program.Logo != null)
             {
