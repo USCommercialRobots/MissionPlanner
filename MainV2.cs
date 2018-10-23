@@ -464,7 +464,7 @@ namespace MissionPlanner
                 }
                 else if (!DisplayConfiguration.displayAdvActionsTab && t.TabPages.Contains(FlightData.tabActions))
                 {
-                    t.TabPages.Remove(FlightData.tabActions);
+                    //t.TabPages.Remove(FlightData.tabActions);
                 }
                 if (DisplayConfiguration.displaySimpleActionsTab && !t.TabPages.Contains(FlightData.tabActionsSimple))
                 {
@@ -711,7 +711,8 @@ namespace MissionPlanner
 
             if (splash != null)
             {
-                this.Text = splash?.Text;
+                // this.Text = splash?.Text;
+                this.Text = "FMS v1.0";
                 titlebar = splash?.Text;
             }
 
@@ -1647,7 +1648,8 @@ namespace MissionPlanner
                 // save the baudrate for this port
                 Settings.Instance[_connectionControl.CMB_serialport.Text + "_BAUD"] = _connectionControl.CMB_baudrate.Text;
 
-                this.Text = titlebar + " " + comPort.MAV.VersionString;
+                //this.Text = titlebar + " " + comPort.MAV.VersionString;
+                this.Text = "FMS v1.0";
 
                 // refresh config window if needed
                 if (MyView.current != null)

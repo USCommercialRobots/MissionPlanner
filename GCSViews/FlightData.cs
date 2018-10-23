@@ -645,6 +645,9 @@ namespace MissionPlanner.GCSViews
 
         private void FlightData_Load(object sender, EventArgs e)
         {
+            // force ArduRover
+            //MainV2.comPort.MAV.cs.firmware = Firmwares.ArduRover;
+
             POI.POIModified += POI_POIModified;
 
             tfr.GotTFRs += tfr_GotTFRs;
@@ -694,6 +697,17 @@ namespace MissionPlanner.GCSViews
             hud1.doResize();
 
             prop = new Propagation(gMapControl1);
+
+            // set starting bg colors for buttons
+
+            this.buttonSwitch.UseVisualStyleBackColor = false;
+            this.buttonSwitch.BackColor = Color.DarkSalmon;
+            this.buttonSwitch.Visible = true;
+
+            this.buttonStop.UseVisualStyleBackColor = false;
+            this.buttonStop.BackColor = Color.DarkSalmon;
+            this.buttonStop.Visible = true;
+
 
             thisthread = new Thread(mainloop);
             thisthread.Name = "FD Mainloop";
@@ -1674,6 +1688,8 @@ namespace MissionPlanner.GCSViews
                     MainV2.comPort.MAV.cs.UpdateCurrentSettings(bindingSourceHud.UpdateDataSource(MainV2.comPort.MAV.cs));
                     //Console.WriteLine("DONE ");
 
+                    MainV2.comPort.MAV.cs.UpdateCurrentSettings(bindingSourceGaugesTab.UpdateDataSource(MainV2.comPort.MAV.cs));
+
                     if (tabControlactions.SelectedTab == tabStatus)
                     {
                         MainV2.comPort.MAV.cs.UpdateCurrentSettings(bindingSourceStatusTab.UpdateDataSource(MainV2.comPort.MAV.cs));
@@ -2427,64 +2443,80 @@ namespace MissionPlanner.GCSViews
         private void tabPage1_Resize(object sender, EventArgs e)
         {
             int mywidth, myheight;
+            System.Diagnostics.Debug.WriteLine("resizoo");
 
             // localize it
             Control tabGauges = sender as Control;
 
-            float scale = tabGauges.Width/(float) tabGauges.Height;
-
-            if (scale > 0.5 && scale < 1.9)
-            {
-// square
-                Gvspeed.Visible = true;
-
-                if (tabGauges.Height < tabGauges.Width)
-                    myheight = tabGauges.Height/2;
-                else
-                    myheight = tabGauges.Width/2;
-
-                Gvspeed.Height = myheight;
-                Gspeed.Height = myheight;
-                Galt.Height = myheight;
-                Gheading.Height = myheight;
-
-                Gvspeed.Location = new Point(0, 0);
-                Gspeed.Location = new Point(Gvspeed.Right, 0);
+            myheight = 120;
+            mywidth = 120;
+            Gspeed.Location = new Point(10, 10);
+            Gheading.Location = new Point(Gspeed.Right + 135, 10);
 
 
-                Galt.Location = new Point(0, Gspeed.Bottom);
-                Gheading.Location = new Point(Galt.Right, Gspeed.Bottom);
+//            float scale = tabGauges.Width/(float) tabGauges.Height;
 
-                return;
-            }
+//            if (scale > 0.5 && scale < 1.9)
+//            {
+//// square
+//                Gvspeed.Visible = true;
 
-            if (tabGauges.Width < 500)
-            {
-                Gvspeed.Visible = false;
-                mywidth = tabGauges.Width/3;
+//                if (tabGauges.Height < tabGauges.Width)
+//                {
+//                    //myheight = tabGauges.Height / 2;
+//                    myheight = 120;
+//                }
+//                else
+//                {
+//                    myheight = 120;
+//                }
 
-                Gspeed.Height = mywidth;
-                Galt.Height = mywidth;
-                Gheading.Height = mywidth;
+//                Gvspeed.Height = myheight;
+//                Gspeed.Height = myheight;
+//                Galt.Height = myheight;
+//                Gheading.Height = myheight;
 
-                Gspeed.Location = new Point(0, 0);
-            }
-            else
-            {
-                Gvspeed.Visible = true;
-                mywidth = tabGauges.Width/4;
+//                Gvspeed.Location = new Point(0, 0);
+//                //Gspeed.Location = new Point(Gvspeed.Right, 0);
+//                Gspeed.Location = new Point(10, 10);
 
-                Gvspeed.Height = mywidth;
-                Gspeed.Height = mywidth;
-                Galt.Height = mywidth;
-                Gheading.Height = mywidth;
 
-                Gvspeed.Location = new Point(0, 0);
-                Gspeed.Location = new Point(Gvspeed.Right, 0);
-            }
+//                Galt.Location = new Point(0, Gspeed.Bottom);
+//                Gheading.Location = new Point(Gspeed.Right + 100, 10);
 
-            Galt.Location = new Point(Gspeed.Right, 0);
-            Gheading.Location = new Point(Galt.Right, 0);
+//                return;
+//            }
+
+//            if (tabGauges.Width < 500)
+//            {
+//                Gvspeed.Visible = false;
+//                //mywidth = tabGauges.Width/3;
+//                mywidth = 120;
+
+//                Gspeed.Height = mywidth;
+//                Galt.Height = mywidth;
+//                Gheading.Height = mywidth;
+
+//                Gspeed.Location = new Point(10, 10);
+//            }
+//            else
+//            {
+//                Gvspeed.Visible = true;
+//                //mywidth = tabGauges.Width/4;
+//                mywidth = 120;
+
+//                Gvspeed.Height = mywidth;
+//                Gspeed.Height = mywidth;
+//                Galt.Height = mywidth;
+//                Gheading.Height = mywidth;
+
+//                Gvspeed.Location = new Point(0, 0);
+//                Gspeed.Location = new Point(10, 10);
+//            }
+
+//            Gspeed.Location = new Point(10, 10);
+//            Galt.Location = new Point(Gspeed.Right, 0);
+//            Gheading.Location = new Point(Gspeed.Right + 100, 10);
         }
 
         private void BUT_setmode_Click(object sender, EventArgs e)
@@ -2496,8 +2528,61 @@ namespace MissionPlanner.GCSViews
                     return;
                 }
             }
+            System.Diagnostics.Debug.WriteLine("CMB_modes");
+            System.Diagnostics.Debug.WriteLine(CMB_modes.Text);
             MainV2.comPort.setMode(CMB_modes.Text);
         }
+
+        public String mode = "";
+        public bool modeChosen = false;
+
+        private void BUT_setmode_fromModeVariable_Click(object sender, EventArgs e)
+        {
+            if (!this.modeChosen)
+            {
+                CustomMessageBox.Show("Mode not chosen");
+                return;
+            }
+
+            if (MainV2.comPort.MAV.cs.failsafe)
+            {
+                if (CustomMessageBox.Show("You are in failsafe, are you sure?", "Failsafe", MessageBoxButtons.YesNo) != (int)DialogResult.Yes)
+                {
+                    return;
+                }
+            }
+
+            System.Diagnostics.Debug.WriteLine("modeee");
+            System.Diagnostics.Debug.WriteLine(mode);
+            System.Diagnostics.Debug.WriteLine(this.mode);
+            MainV2.comPort.setMode(this.mode);
+            this.labelCurrentMode.Text = this.mode;
+        }
+
+        private void BUT_setmode_manual_Click(object sender, EventArgs e) {
+            this.mode = "manual";
+            this.modeChosen = true;
+            this.buttonManual.BackColor = Color.DarkOrange;
+            this.buttonAuto.BackColor = Color.Green;
+            this.buttonHold.BackColor = Color.Green;
+        }
+
+        private void BUT_setmode_auto_Click(object sender, EventArgs e) {
+            this.mode = "auto";
+            this.modeChosen = true;
+            this.buttonManual.BackColor = Color.Green;
+            this.buttonAuto.BackColor = Color.DarkOrange;
+            this.buttonHold.BackColor = Color.Green;
+        }
+
+        private void BUT_setmode_hold_Click(object sender, EventArgs e) {
+            this.mode = "hold";
+            this.modeChosen = true;
+            this.buttonManual.BackColor = Color.Green;
+            this.buttonAuto.BackColor = Color.Green;
+            this.buttonHold.BackColor = Color.DarkOrange;
+        }
+
 
         private void BUT_setwp_Click(object sender, EventArgs e)
         {
@@ -2616,13 +2701,18 @@ namespace MissionPlanner.GCSViews
 
         private void BUT_joystick_Click(object sender, EventArgs e)
         {
-            Form joy = new JoystickSetup();
+            JoystickSetup joy = new JoystickSetup();
             ThemeManager.ApplyThemeTo(joy);
             joy.Show();
+            joy.BUT_enable_Click(null, null);
+            joy.Close();
         }
 
         private void CMB_modes_Click(object sender, EventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("modes");
+            System.Diagnostics.Debug.WriteLine(MainV2.comPort.MAV.cs.firmware);
+            System.Diagnostics.Debug.WriteLine(Common.getModesList(MainV2.comPort.MAV.cs.firmware));
             CMB_modes.DataSource = Common.getModesList(MainV2.comPort.MAV.cs.firmware);
             CMB_modes.ValueMember = "Key";
             CMB_modes.DisplayMember = "Value";
@@ -3545,8 +3635,55 @@ namespace MissionPlanner.GCSViews
             Refresh();
         }
 
+
+        private void BUT_DISARM_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("disarm");
+
+            if (!MainV2.comPort.BaseStream.IsOpen)
+                return;
+
+            // arm the MAV
+            try
+            {
+                if (CustomMessageBox.Show("Are you sure you want to Disarm?", "Disarm?", MessageBoxButtons.YesNo) != (int)DialogResult.Yes)
+                    return;
+
+                bool ans = MainV2.comPort.doARM(false);
+                if (ans == false)
+                    CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
+            }
+            catch
+            {
+                CustomMessageBox.Show(Strings.ErrorNoResponce, Strings.ERROR);
+            }
+        }
+
+
         private void BUT_ARM_Click(object sender, EventArgs e)
         {
+            if (!MainV2.comPort.BaseStream.IsOpen)
+                return;
+
+            // arm the MAV
+            try
+            {
+                if (MainV2.comPort.MAV.cs.armed)
+                    return;
+
+                bool ans = MainV2.comPort.doARM(true);
+                if (ans == false)
+                    CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
+            }
+            catch
+            {
+                CustomMessageBox.Show(Strings.ErrorNoResponce, Strings.ERROR);
+            }
+        }
+
+        private void BUT_ARM_SWITCH_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Debug.WriteLine("switch arm");
             if (!MainV2.comPort.BaseStream.IsOpen)
                 return;
 
@@ -3561,6 +3698,12 @@ namespace MissionPlanner.GCSViews
                 bool ans = MainV2.comPort.doARM(!MainV2.comPort.MAV.cs.armed);
                 if (ans == false)
                     CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
+
+                if (MainV2.comPort.MAV.cs.armed) {
+                    this.buttonSwitch.BackColor = System.Drawing.Color.Green;
+                } else {
+                    this.buttonSwitch.BackColor = System.Drawing.Color.DarkSalmon;
+                }
             }
             catch
             {
