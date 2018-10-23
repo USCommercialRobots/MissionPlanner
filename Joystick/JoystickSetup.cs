@@ -116,7 +116,7 @@ namespace MissionPlanner.Joystick
             return temp;
         }
 
-        private void BUT_enable_Click(object sender, EventArgs e)
+        internal void BUT_enable_Click(object sender, EventArgs e)
         {
             if (MainV2.joystick == null || MainV2.joystick.enabled == false)
             {
