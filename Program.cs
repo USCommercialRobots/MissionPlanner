@@ -131,7 +131,8 @@ namespace MissionPlanner
             string strVersion = File.Exists("version.txt")
                 ? File.ReadAllText("version.txt")
                 : System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            Splash.Text = name + " " + Application.ProductVersion + " build " + strVersion;
+            //Splash.Text = name + " " + Application.ProductVersion + " build " + strVersion;
+            Splash.Text = "FMS v1.0";
             Splash.Show();
 
             Application.DoEvents();
